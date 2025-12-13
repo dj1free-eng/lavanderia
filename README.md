@@ -1,0 +1,2 @@
+# lavanderia
+Control lavanderia hotel
