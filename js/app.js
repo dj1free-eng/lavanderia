@@ -1,4 +1,4 @@
-import { addToQueue, getQueue, deleteQueueItems, clearQueue, queueCount } from "./db.js";
+ñimport { addToQueue, getQueue, deleteQueueItems, clearQueue, queueCount } from "./db.js";
 
 const PRODUCTS = [
   "Caminos",
@@ -469,29 +469,39 @@ async function syncNow() {
     return;
   }
 
-  log(`Sincronizando ${q.length} filas...`);
+  const payload = JSON.stringify({ token: cfg.token, rows: q.map(x => x.payload) });
+  const qids = q.map(x => x.qid);
+
+  log(`Enviando ${q.length} filas... (modo compatible CORS)`);
+
+  let sent = false;
+
   try {
-    const res = await fetch(cfg.url, {
-  method: "POST",
-  headers: { "Content-Type": "text/plain;charset=utf-8" },
-  body: JSON.stringify({ token: cfg.token, rows: q.map(x => x.payload) })
-});
-
-    const data = await res.json().catch(() => null);
-    if (!res.ok || !data || data.ok !== true) {
-      log("Error de sync: " + (data?.error || res.statusText));
-      return;
+    if (navigator.sendBeacon) {
+      const blob = new Blob([payload], { type: "text/plain;charset=utf-8" });
+      sent = navigator.sendBeacon(cfg.url, blob);
     }
+  } catch {}
 
-    await deleteQueueItems(q.map(x => x.qid));
-    log(`OK. Insertadas: ${data.inserted}. Cola limpia.`);
-    await refreshQueueBadge();
-  } catch (e) {
-  log("Sync falló: " + (e?.message || String(e)));
+  if (!sent) {
+    try {
+      await fetch(cfg.url, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: payload
+      });
+      sent = true;
+    } catch {}
+  }
+
+  if (!sent) {
+    log("No se pudo enviar (fallo real de red).");
+    return;
+  }
+
+  log("Datos enviados. Comprueba BD_REGISTROS y luego vacía la cola cuando quieras.");
 }
-
-}
-
 async function exportQueue() {
   const q = await getQueue(2000);
   const blob = new Blob([JSON.stringify(q.map(x => x.payload), null, 2)], { type: "application/json" });
