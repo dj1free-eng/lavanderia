@@ -472,10 +472,10 @@ async function syncNow() {
   log(`Sincronizando ${q.length} filas...`);
   try {
     const res = await fetch(cfg.url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: cfg.token, rows: q.map(x => x.payload) })
-    });
+  method: "POST",
+  headers: { "Content-Type": "text/plain;charset=utf-8" },
+  body: JSON.stringify({ token: cfg.token, rows: q.map(x => x.payload) })
+});
 
     const data = await res.json().catch(() => null);
     if (!res.ok || !data || data.ok !== true) {
