@@ -469,20 +469,29 @@ async function syncNow() {
     return;
   }
 
-  const payload = JSON.stringify({ token: cfg.token, rows: q.map(x => x.payload) });
-  const qids = q.map(x => x.qid);
+  const payload = JSON.stringify({
+    token: cfg.token,
+    rows: q.map(x => x.payload)
+  });
 
-  log(`Enviando ${q.length} filas... (modo compatible CORS)`);
+  log(`Enviando ${q.length} filas...`);
 
   let sent = false;
 
+  // 1) Mejor opción en iOS/PWA: sendBeacon
   try {
     if (navigator.sendBeacon) {
-      const blob = new Blob([payload], { type: "text/plain;charset=utf-8" });
-      sent = navigator.sendBeacon(cfg.url, blob);
+      const ok = navigator.sendBeacon(
+        cfg.url,
+        new Blob([payload], { type: "text/plain;charset=utf-8" })
+      );
+      if (ok) sent = true;
     }
-  } catch {}
+  } catch (e) {
+    // seguimos al fallback
+  }
 
+  // 2) Fallback: fetch no-cors (envía pero no permite leer respuesta)
   if (!sent) {
     try {
       await fetch(cfg.url, {
@@ -492,7 +501,9 @@ async function syncNow() {
         body: payload
       });
       sent = true;
-    } catch {}
+    } catch (e) {
+      log("Sync falló: " + (e?.message || String(e)));
+    }
   }
 
   if (!sent) {
@@ -500,8 +511,10 @@ async function syncNow() {
     return;
   }
 
-  log("Datos enviados. Comprueba BD_REGISTROS y luego vacía la cola cuando quieras.");
+  log("Enviado. Ahora abre el Sheet y verifica que entraron filas en BD_REGISTROS.");
+  log("Si entraron, vuelve aquí y pulsa 'Vaciar cola' para evitar duplicados.");
 }
+
 async function exportQueue() {
   const q = await getQueue(2000);
   const blob = new Blob([JSON.stringify(q.map(x => x.payload), null, 2)], { type: "application/json" });
