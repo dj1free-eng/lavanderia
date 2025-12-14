@@ -487,8 +487,9 @@ async function syncNow() {
     log(`OK. Insertadas: ${data.inserted}. Cola limpia.`);
     await refreshQueueBadge();
   } catch (e) {
-    log("No se pudo sincronizar (offline o URL incorrecta).");
-  }
+  log("Sync falló: " + (e?.message || String(e)));
+}
+
 }
 
 async function exportQueue() {
