@@ -1,4 +1,4 @@
-ñimport { addToQueue, getQueue, deleteQueueItems, clearQueue, queueCount } from "./db.js";
+import { addToQueue, getQueue, deleteQueueItems, clearQueue, queueCount } from "./db.js";
 
 const PRODUCTS = [
   "Caminos",
