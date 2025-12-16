@@ -119,3 +119,25 @@ input,select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--o
   opacity:.85;
   line-height: 1.3;
 }
+/* ===== Feedback táctil global ===== */
+button,
+.btn {
+  transition:
+    transform 0.08s ease,
+    box-shadow 0.08s ease,
+    opacity 0.08s ease,
+    filter 0.08s ease;
+}
+
+button:active,
+.btn:active {
+  transform: scale(0.96);
+  filter: brightness(0.9);
+}
+
+/* Evitar doble tap accidental */
+button:disabled,
+.btn:disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
