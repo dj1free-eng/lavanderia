@@ -166,3 +166,7 @@ button:disabled,
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
 }
+.btn-success {
+  background-color: #16a34a !important;
+  border-color: #16a34a !important;
+}
