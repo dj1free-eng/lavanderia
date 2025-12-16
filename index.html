@@ -153,6 +153,40 @@
         <input id="cfgToken" type="password" placeholder="Tu token secreto" />
       </div>
 
+  <div class="status-panel" id="statusPanel">
+    <div class="status-row">
+      <span class="status-label">Estado</span>
+      <span class="status-badge" id="uiNet">—</span>
+    </div>
+
+    <div class="status-row">
+      <span class="status-label">Cola</span>
+      <span class="status-badge" id="uiQueue">0</span>
+    </div>
+
+    <div class="status-row">
+      <span class="status-label">Último envío</span>
+      <span class="status-badge" id="uiLastSent">—</span>
+    </div>
+
+    <div class="status-row">
+      <span class="status-label">Verificación</span>
+      <span class="status-badge" id="uiVerify">—</span>
+    </div>
+
+    <div class="status-actions">
+      <button id="btnMarkVerified" class="btn btn-outline">Marcar como verificado</button>
+    </div>
+  </div>
+
+  <div class="history" id="historyCard">
+    <div class="history-head">
+      <div class="history-title">Historial de hoy (cola)</div>
+      <button id="btnRefreshHistory" class="btn btn-outline">Actualizar</button>
+    </div>
+    <div id="historyList" class="history-list"></div>
+  </div>
+
       <div class="actions">
         <button id="btnSaveCfg" class="btn btn-outline">Guardar ajustes</button>
         <button id="btnExport" class="btn btn-outline">Exportar cola (JSON)</button>
