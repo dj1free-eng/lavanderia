@@ -469,6 +469,7 @@ items.push({
   await addToQueue(items);
   log(`Parte guardado offline. Filas en cola: ${items.length}`);
   await refreshQueueBadge();
+  flashSuccess(el("btnGuardarParte"));
 }
 
 async function syncNow() {
@@ -531,6 +532,8 @@ async function syncNow() {
 
   log("Enviado. Ahora abre el Sheet y verifica que entraron filas en BD_REGISTROS.");
   log("Si entraron, vuelve aquí y pulsa 'Vaciar cola' para evitar duplicados.");
+flashSuccess(el("btnSync"));
+
 }
 
 async function exportQueue() {
@@ -756,6 +759,7 @@ function wirePaquete2() {
     }
     uiSaveState({ pendingVerify: false });
     log("Cola vaciada.");
+    flashSuccess(btnClear);
     await uiRefreshStatus();
     await uiRenderHistoryToday();
   })
