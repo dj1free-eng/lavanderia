@@ -615,6 +615,30 @@ el("btnSync").addEventListener(
 
   window.addEventListener("online", () => { setNetBadge(); log("Online."); });
   window.addEventListener("offline", () => { setNetBadge(); log("Offline."); });
+
+  // Home -> App
+  el("btnStart")?.addEventListener("click", () => {
+    updateFechaUI();
+    showApp();
+    setActiveTab("sucio");
+  });
+
+  // Volver a Home (cambiar fecha)
+  el("btnGoHome")?.addEventListener("click", () => {
+    showHome();
+  });
+
+  // Tabs
+  document.querySelectorAll(".tabbtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const t = btn.getAttribute("data-go");
+      setActiveTab(t);
+    });
+  });
+
+  // Si cambias fecha, refresca cabecera
+  el("fechaBase")?.addEventListener("change", updateFechaUI);
+
 }
 
 (async function main() {
@@ -623,6 +647,9 @@ el("btnSync").addEventListener(
   bindListEvents();
   bindUI();
   initDate();
+    updateFechaUI();
+  showHome();
+  setActiveTab("sucio");
   loadCfg();
   await refreshQueueBadge();
   registerSW();
