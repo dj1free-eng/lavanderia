@@ -62,6 +62,31 @@ async function refreshQueueBadge() {
   qb.textContent = `Cola: ${c}`;
 }
 
+function showHome() {
+  document.getElementById("homeScreen")?.classList.remove("hidden");
+  document.getElementById("appScreen")?.classList.add("hidden");
+}
+
+function showApp() {
+  document.getElementById("homeScreen")?.classList.add("hidden");
+  document.getElementById("appScreen")?.classList.remove("hidden");
+}
+
+function setActiveTab(name) {
+  document.querySelectorAll(".tab").forEach(s => {
+    s.classList.toggle("hidden", s.getAttribute("data-tab") !== name);
+  });
+  document.querySelectorAll(".tabbtn").forEach(b => {
+    b.classList.toggle("active", b.getAttribute("data-go") === name);
+  });
+}
+
+function updateFechaUI() {
+  const fb = el("fechaBase")?.value || "—";
+  const out = document.getElementById("uiFechaBase");
+  if (out) out.textContent = fb;
+}
+
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (m) => ({
     "&": "&amp;",
