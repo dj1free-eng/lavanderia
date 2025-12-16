@@ -569,8 +569,14 @@ function initDate() {
 function bindUI() {
   el("btnAddJaula").addEventListener("click", addJaula);
   el("btnAddTicket").addEventListener("click", addTicket);
-  el("btnGuardarParte").addEventListener("click", guardarParteOffline);
-  el("btnSync").addEventListener("click", syncNow);
+el("btnGuardarParte").addEventListener(
+  "click",
+  withButtonFeedback(el("btnGuardarParte"), guardarParteOffline)
+);
+el("btnSync").addEventListener(
+  "click",
+  withButtonFeedback(el("btnSync"), syncNow)
+);
   el("btnSaveCfg").addEventListener("click", saveCfg);
   el("btnExport").addEventListener("click", exportQueue);
 
@@ -733,24 +739,27 @@ function wirePaquete2() {
   });
 
   // Vaciar cola seguro
-  btnClear?.addEventListener("click", async () => {
+  btnClear?.addEventListener(
+  "click",
+  withButtonFeedback(btnClear, async () => {
     const n = await safeQueueCount();
     const msg = (n === null)
-      ? "¿Seguro que quieres vaciar la cola? (No pude contar filas.)"
+      ? "¿Seguro que quieres vaciar la cola?"
       : `¿Seguro que quieres vaciar la cola?\nVas a borrar ${n} fila(s).`;
 
     if (!confirm(msg)) return;
 
     const ok = await safeClearQueue();
     if (!ok) {
-      log?.("No pude vaciar la cola (función no disponible o error).");
+      log("No pude vaciar la cola.");
       return;
     }
     uiSaveState({ pendingVerify: false });
-    log?.("Cola vaciada.");
+    log("Cola vaciada.");
     await uiRefreshStatus();
     await uiRenderHistoryToday();
-  });
+  })
+);
 
   // Estado inicial + listeners red
   window.addEventListener("online", uiRefreshStatus);
