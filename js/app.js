@@ -772,6 +772,12 @@ function wirePaquete2() {
 // Enganchar al load sin interferir con tu init actual
 window.addEventListener("load", wirePaquete2);
 
+function flashSuccess(btn, ms = 600) {
+  if (!btn) return;
+  btn.classList.add("btn-success");
+  setTimeout(() => btn.classList.remove("btn-success"), ms);
+}
+
 function withButtonFeedback(btn, fn) {
   return async function (...args) {
     if (!btn) return;
