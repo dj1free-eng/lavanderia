@@ -360,11 +360,18 @@ async function guardarParteOffline() {
 
   const items = [];
 
+const partId = crypto.randomUUID();
+const createdAt = Date.now();
+let seq = 0;
+
+const mkId = () => `${partId}:${++seq}`;
+
   // SUCIO_JAULAS (fecha_evento = hoy)
   for (const j of state.jaulas) {
-    items.push({
-      fecha_base: fechaBase,
-      fecha_evento: fechaBase,
+items.push({
+  id: mkId(),
+  createdAt,
+  fecha_base: fechaBase,
       evento: "SUCIO_JAULAS",
       categoria: j.categoria,
       detalle: j.numJaula || "",
@@ -381,7 +388,9 @@ async function guardarParteOffline() {
   const fechaTickets = addDays(fechaBase, 1);
   for (const t of state.tickets) {
     items.push({
-      fecha_base: fechaBase,
+  id: mkId(),
+  createdAt,
+  fecha_base: fechaBase,
       fecha_evento: fechaTickets,
       evento: "TICKET_UNIDADES",
       categoria: "",
@@ -398,7 +407,9 @@ async function guardarParteOffline() {
   if (extra !== "") {
     const fechaExtra = addDays(fechaBase, 2);
     items.push({
-      fecha_base: fechaBase,
+  id: mkId(),
+  createdAt,
+  fecha_base: fechaBase,
       fecha_evento: fechaExtra,
       evento: "EXTRA_BOLSAS",
       categoria: "",
@@ -418,7 +429,9 @@ async function guardarParteOffline() {
     if (!hasAny) continue;
 
     items.push({
-      fecha_base: fechaBase,
+  id: mkId(),
+  createdAt,
+  fecha_base: fechaBase,
       fecha_evento: fechaBase,
       evento: "LAVADO_HOTEL",
       categoria: tipo,
@@ -436,7 +449,9 @@ async function guardarParteOffline() {
   const sto = el("pSto").value.trim();
 
   const addPC = (key, val) => items.push({
-    fecha_base: fechaBase,
+  id: mkId(),
+  createdAt,
+  fecha_base: fechaBase,
     fecha_evento: fechaBase,
     evento: "PISCINA_CONTROL",
     categoria: "",
@@ -481,13 +496,15 @@ async function syncNow() {
   // 1) Mejor opción en iOS/PWA: sendBeacon
   try {
     if (navigator.sendBeacon) {
-      const ok = navigator.sendBeacon(
-        cfg.url,
-        new Blob([payload], { type: "text/plain;charset=utf-8" })
-      );
-      if (ok) sent = true;
-    }
-  } catch (e) {
+  const ok = navigator.sendBeacon(
+    cfg.url,
+    new Blob([payload], { type: "text/plain;charset=utf-8" })
+  );
+  if (ok) {
+    sent = true;
+    uiMarkSent();
+  }
+} catch (e) {
     // seguimos al fallback
   }
 
@@ -556,7 +573,7 @@ function bindUI() {
   el("btnSync").addEventListener("click", syncNow);
   el("btnSaveCfg").addEventListener("click", saveCfg);
   el("btnExport").addEventListener("click", exportQueue);
-  el("btnClear").addEventListener("click", clearQueueConfirm);
+
 
   document.addEventListener("input", (ev) => {
     if (ev.target.matches(".lav input")) recalcLavadoTotals();
