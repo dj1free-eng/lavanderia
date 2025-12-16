@@ -141,3 +141,28 @@ button:disabled,
   opacity: 0.6;
   pointer-events: none;
 }
+/* ===== Botón trabajando ===== */
+.btn-working {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.btn-working::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0.15),
+    rgba(255,255,255,0.05),
+    rgba(255,255,255,0.15)
+  );
+  animation: shimmer 1s infinite linear;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
