@@ -501,6 +501,7 @@ async function syncNow() {
         body: payload
       });
       sent = true;
+      uiMarkSent();
     } catch (e) {
       log("Sync falló: " + (e?.message || String(e)));
     }
@@ -582,3 +583,168 @@ function bindUI() {
 
   log("Listo. Guarda offline y sincroniza cuando quieras.");
 })();
+// ===== UI Estado + Historial + Acciones seguras (Paquete 2) =====
+const UI_STATE_KEY = "lavanderia_ui_state_v1";
+
+function uiLoadState() {
+  try { return JSON.parse(localStorage.getItem(UI_STATE_KEY) || "{}"); }
+  catch { return {}; }
+}
+function uiSaveState(patch) {
+  const cur = uiLoadState();
+  const next = Object.assign({}, cur, patch);
+  localStorage.setItem(UI_STATE_KEY, JSON.stringify(next));
+  return next;
+}
+
+function fmtTime(ts) {
+  if (!ts) return "—";
+  const d = new Date(ts);
+  return d.toLocaleString();
+}
+
+function setText(id, txt) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = txt;
+}
+
+function netLabel() {
+  return navigator.onLine ? "Online" : "Offline";
+}
+
+async function safeQueueCount() {
+  try {
+    if (typeof queueCount === "function") return await queueCount();
+  } catch {}
+  return null;
+}
+
+async function safeGetQueue(limit = 50) {
+  try {
+    if (typeof getQueue === "function") return await getQueue(limit);
+  } catch {}
+  return [];
+}
+
+async function safeClearQueue() {
+  try {
+    if (typeof clearQueue === "function") return await clearQueue();
+  } catch {}
+  return false;
+}
+
+async function uiRefreshStatus() {
+  setText("uiNet", netLabel());
+
+  const n = await safeQueueCount();
+  setText("uiQueue", (n === null) ? "?" : String(n));
+
+  const st = uiLoadState();
+  setText("uiLastSent", st.lastSentAt ? fmtTime(st.lastSentAt) : "—");
+  setText("uiVerify", st.pendingVerify ? "Pendiente" : "OK");
+}
+
+function uiMarkSent() {
+  uiSaveState({ lastSentAt: Date.now(), pendingVerify: true });
+  uiRefreshStatus();
+}
+
+function uiMarkVerified() {
+  uiSaveState({ pendingVerify: false });
+  uiRefreshStatus();
+  log?.("Marcado como verificado. (Ya puedes vaciar cola si BD_REGISTROS está OK)");
+}
+
+async function uiRenderHistoryToday() {
+  const list = document.getElementById("historyList");
+  if (!list) return;
+
+  const q = await safeGetQueue(80);
+  if (!q.length) {
+    list.innerHTML = `<div class="history-item"><div class="meta">No hay filas en cola.</div></div>`;
+    return;
+  }
+
+  // Intento: mostrar lo más útil sin conocer tu estructura exacta
+  // En tu cola suele haber { payload: {...} } o directamente el objeto.
+  const today = new Date();
+  const y = today.getFullYear(), m = today.getMonth(), d = today.getDate();
+
+  const items = q
+    .map(x => x.payload ? x.payload : x)
+    .filter(p => {
+      const t = p.createdAt || p.ts || p._ts || Date.parse(p.fecha_base || p.fecha_evento || "");
+      if (!t || isNaN(t)) return true; // si no hay fecha, lo muestro igual
+      const dd = new Date(t);
+      return dd.getFullYear() === y && dd.getMonth() === m && dd.getDate() === d;
+    })
+    .slice(-20)
+    .reverse();
+
+  list.innerHTML = items.map(p => {
+    const ev = p.evento || p.type || "—";
+    const cat = p.categoria || "";
+    const det = p.detalle || p.producto || "";
+    const uni = (p.unidades ?? "");
+    const kg = (p.kg_neto ?? p.kg_bruto ?? "");
+    return `
+      <div class="history-item">
+        <div class="top">
+          <span>${ev}</span>
+          <span>${cat}</span>
+        </div>
+        <div class="meta">
+          ${det ? `<div>${det}</div>` : ""}
+          ${(uni !== "" && uni !== null) ? `<div>Unidades: ${uni}</div>` : ""}
+          ${(kg !== "" && kg !== null) ? `<div>Kg: ${kg}</div>` : ""}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function wirePaquete2() {
+  const btnClear = document.getElementById("btnClear");
+  const btnVerified = document.getElementById("btnMarkVerified");
+  const btnRefreshHistory = document.getElementById("btnRefreshHistory");
+
+  btnVerified?.addEventListener("click", uiMarkVerified);
+
+  btnRefreshHistory?.addEventListener("click", async () => {
+    await uiRenderHistoryToday();
+    await uiRefreshStatus();
+  });
+
+  // Vaciar cola seguro
+  btnClear?.addEventListener("click", async () => {
+    const n = await safeQueueCount();
+    const msg = (n === null)
+      ? "¿Seguro que quieres vaciar la cola? (No pude contar filas.)"
+      : `¿Seguro que quieres vaciar la cola?\nVas a borrar ${n} fila(s).`;
+
+    if (!confirm(msg)) return;
+
+    const ok = await safeClearQueue();
+    if (!ok) {
+      log?.("No pude vaciar la cola (función no disponible o error).");
+      return;
+    }
+    uiSaveState({ pendingVerify: false });
+    log?.("Cola vaciada.");
+    await uiRefreshStatus();
+    await uiRenderHistoryToday();
+  });
+
+  // Estado inicial + listeners red
+  window.addEventListener("online", uiRefreshStatus);
+  window.addEventListener("offline", uiRefreshStatus);
+
+  uiRefreshStatus();
+  uiRenderHistoryToday();
+}
+
+// Enganchar al load sin interferir con tu init actual
+window.addEventListener("load", wirePaquete2);
+
+// IMPORTANTE: cuando tu sync realmente "envíe", llama a uiMarkSent()
+// Ejemplo: dentro de syncNow(), después de "sent=true", añade: uiMarkSent();
