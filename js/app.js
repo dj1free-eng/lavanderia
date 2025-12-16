@@ -763,5 +763,17 @@ function wirePaquete2() {
 // Enganchar al load sin interferir con tu init actual
 window.addEventListener("load", wirePaquete2);
 
+function withButtonFeedback(btn, fn) {
+  return async function (...args) {
+    if (!btn) return;
+    btn.classList.add("btn-working");
+    try {
+      await fn.apply(this, args);
+    } finally {
+      btn.classList.remove("btn-working");
+    }
+  };
+}
+
 // IMPORTANTE: cuando tu sync realmente "envíe", llama a uiMarkSent()
 // Ejemplo: dentro de syncNow(), después de "sent=true", añade: uiMarkSent();
