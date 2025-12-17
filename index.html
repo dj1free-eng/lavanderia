@@ -111,26 +111,66 @@
       </section>
 
       <!-- TAB: LIMPIO -->
-      <section class="tab hidden" data-tab="limpio">
-        <section class="card">
-          <div class="card-head">
-            <div>
-              <div class="card-title">Ropa limpia (tickets)</div>
-              <div class="card-subtitle">Unidades por producto según ticket</div>
-            </div>
-            <button id="btnAddTicket" class="btn btn-outline">+ Ticket</button>
-          </div>
+<section class="tab hidden" data-tab="limpio">
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <div class="card-title">Ropa limpia (tickets)</div>
+        <div class="card-subtitle">Rellena el formulario y añade. Se limpia para el siguiente.</div>
+      </div>
+    </div>
 
-          <div id="ticketsList" class="list"></div>
-          <hr class="sep" />
+    <!-- Formulario único -->
+    <div class="grid2">
+      <div class="row">
+        <label class="label">Producto</label>
+        <select id="tProducto">
+          <option>Caminos</option>
+          <option>Servilletas</option>
+          <option>Mantel</option>
+          <option>San. Ind.</option>
+          <option>Vanob. Ind.</option>
+          <option>King rayas</option>
+          <option>King lisas</option>
+          <option>Sab. Cuna</option>
+          <option>Cuadrantes</option>
+          <option>Fund. Almohada</option>
+          <option>Extra (mezcla)</option>
+        </select>
+      </div>
 
-<div class="row">
-  <label class="label">Ropa extra (bolsas) · kg netos</label>
-  <input id="extraKg" type="number" step="0.1" inputmode="decimal" placeholder="0,0" />
-  <div class="hint">Se pesa cuando llega limpia separada en bolsas (normalmente fecha +2).</div>
-</div>
-        </section>
-      </section>
+      <div class="row">
+        <label class="label">Unidades</label>
+        <input id="tUnidades" type="number" step="1" inputmode="numeric" placeholder="0" />
+      </div>
+    </div>
+
+    <div class="actions" style="margin-top:12px;">
+      <button id="btnAddTicket" class="btn btn-primary" type="button">Añadir ticket</button>
+    </div>
+
+    <!-- Totales -->
+    <div class="totals" style="margin-top:12px;">
+      <div class="tot tot-main">
+        <div class="tot-label">Total unidades (tickets)</div>
+        <div class="tot-val" id="totTicketsUni">0</div>
+      </div>
+    </div>
+
+    <div id="ticketsTotals" class="list" style="margin-top:10px;"></div>
+
+    <!-- Lista líneas -->
+    <div id="ticketsList" class="list" style="margin-top:10px;"></div>
+
+    <!-- Extra bolsas (lo que movimos aquí) -->
+    <hr class="sep" />
+    <div class="row">
+      <label class="label">Ropa extra (bolsas) · kg netos</label>
+      <input id="extraKg" type="number" step="0.1" inputmode="decimal" placeholder="0,0" />
+      <div class="hint">Se pesa cuando llega limpia separada en bolsas (normalmente fecha +2).</div>
+    </div>
+  </section>
+</section>
 
       <!-- TAB: HOTEL -->
       <section class="tab hidden" data-tab="hotel">
