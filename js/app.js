@@ -336,22 +336,22 @@ function addTicket() {
 }
 
 function bindListEvents() {
-  // JAULAS: solo borrar (ya no se editan en la lista)
-  el("jaulasList").addEventListener("click", (ev) => {
-    const btn = ev.target.closest("button");
-    if (!btn) return;
+  // JAULAS: solo borrar (ya no se editan en la el("ticketsList").addEventListener("click", (ev) => {
+el("ticketsList").addEventListener("click", (ev) => {
+  const btn = ev.target.closest("button");
+  if (!btn) return;
 
-    const row = ev.target.closest(".line-item");
-    if (!row) return;
+  const row = ev.target.closest(".line-item");
+  if (!row) return;
 
-    if (btn.dataset.action === "del") {
-      state.jaulas = state.jaulas.filter(x => x.id !== row.dataset.id);
-      renderJaulas();
-    }
-  });
+  if (btn.dataset.action === "del") {
+    state.tickets = state.tickets.filter(x => x.id !== row.dataset.id);
+    renderTickets();
+  }
+}););
 
   // TICKETS: se quedan como estaban (por ahora)
-  el("ticketsList").addEventListener("input", (ev) => {
+
     const item = ev.target.closest(".item");
     if (!item) return;
 
