@@ -245,42 +245,21 @@ function addTicket() {
 }
 
 function bindListEvents() {
-  el("jaulasList").addEventListener("input", (ev) => {
-    const item = ev.target.closest(".item");
-    if (!item) return;
-
-    const id = item.dataset.id;
-    const j = state.jaulas.find(x => x.id === id);
-    if (!j) return;
-
-    const field = ev.target.dataset.field;
-    if (!field) return;
-
-    if (field === "categoria") j.categoria = ev.target.value;
-    if (field === "numJaula") j.numJaula = ev.target.value.trim();
-    if (field === "bruto") j.bruto = ev.target.value;
-    if (field === "tara") j.tara = ev.target.value;
-
-    const neto = Math.max(0, num(j.bruto) - num(j.tara ?? 42));
-    const netEl = item.querySelector('[data-field="neto"]');
-    if (netEl) netEl.textContent = fmtKg(neto);
-
-    recalcJaulasTotals();
-  });
-
+  // JAULAS: solo borrar (ya no se editan en la lista)
   el("jaulasList").addEventListener("click", (ev) => {
     const btn = ev.target.closest("button");
     if (!btn) return;
 
-    const item = ev.target.closest(".item");
-    if (!item) return;
+    const row = ev.target.closest(".line-item");
+    if (!row) return;
 
     if (btn.dataset.action === "del") {
-      state.jaulas = state.jaulas.filter(x => x.id !== item.dataset.id);
+      state.jaulas = state.jaulas.filter(x => x.id !== row.dataset.id);
       renderJaulas();
     }
   });
 
+  // TICKETS: se quedan como estaban (por ahora)
   el("ticketsList").addEventListener("input", (ev) => {
     const item = ev.target.closest(".item");
     if (!item) return;
@@ -309,7 +288,6 @@ function bindListEvents() {
     }
   });
 }
-
 /* ---------- Config (URL + Token) ---------- */
 
 function loadCfg() {
