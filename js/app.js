@@ -156,43 +156,21 @@ const state = {
 function jaulaItemTemplate(data) {
   const { id, categoria, numJaula, bruto, tara } = data;
   const neto = Math.max(0, num(bruto) - num(tara ?? 42));
+
   return `
-  <div class="item" data-id="${id}">
-    <div class="item-top">
-      <div class="item-title">Jaula ${escapeHtml(numJaula || "—")} · ${escapeHtml(categoria || "SÁBANAS")}</div>
-      <div class="item-actions">
-        <button class="iconbtn" data-action="del">×</button>
+    <div class="line-item" data-id="${id}">
+      <div class="line-left">
+        <div class="line-title">Jaula ${escapeHtml(numJaula || "—")} · ${escapeHtml(categoria || "SÁBANAS")}</div>
+        <div class="line-sub">Bruto: ${fmtKg(num(bruto))} · Tara: ${fmtKg(num(tara ?? 42))}</div>
+      </div>
+
+      <div class="line-right">
+        <div class="line-kg">${fmtKg(neto)}</div>
+        <button class="iconbtn" data-action="del" type="button">×</button>
       </div>
     </div>
-
-    <div class="grid2">
-      <div class="row">
-        <label class="label">Nº jaula</label>
-        <input type="text" value="${escapeAttr(numJaula || "")}" data-field="numJaula" placeholder="Ej: 12A" />
-      </div>
-
-      <div class="row">
-        <label class="label">Categoría</label>
-        <select data-field="categoria">
-          ${SUCIO_CATS.map(c => `<option ${c === categoria ? "selected" : ""}>${c}</option>`).join("")}
-        </select>
-      </div>
-
-      <div class="row">
-        <label class="label">Peso bruto (kg)</label>
-        <input type="number" step="0.1" inputmode="decimal" value="${escapeAttr(bruto ?? "")}" data-field="bruto" placeholder="Ej: 196.2" />
-      </div>
-
-      <div class="row">
-        <label class="label">Tara (kg)</label>
-        <input type="number" step="0.1" inputmode="decimal" value="${escapeAttr(tara ?? 42)}" data-field="tara" />
-      </div>
-    </div>
-
-    <div class="mini"><strong>Neto:</strong> <span data-field="neto">${fmtKg(neto)}</span></div>
-  </div>`;
+  `;
 }
-
 function ticketItemTemplate(data) {
   const { id, producto, unidades } = data;
   return `
