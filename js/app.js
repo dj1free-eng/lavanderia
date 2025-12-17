@@ -174,28 +174,64 @@ function jaulaItemTemplate(data) {
 function ticketItemTemplate(data) {
   const { id, producto, unidades } = data;
   return `
-  <div class="item" data-id="${id}">
-    <div class="item-top">
-      <div class="item-title">Ticket · ${escapeHtml(producto || "—")}</div>
-      <div class="item-actions">
-        <button class="iconbtn" data-action="del">×</button>
+    <div class="line-item" data-id="${id}">
+      <div class="line-left">
+        <div class="line-title">${escapeHtml(producto || "—")}</div>
+        <div class="line-sub">Unidades: ${escapeHtml(String(unidades ?? ""))}</div>
+      </div>
+      <div class="line-right">
+        <div class="line-kg">${escapeHtml(String(unidades ?? 0))}</div>
+        <button class="iconbtn" data-action="del" type="button">×</button>
       </div>
     </div>
+  `;
+}
 
-    <div class="grid2">
-      <div class="row">
-        <label class="label">Producto</label>
-        <select data-field="producto">
-          ${PRODUCTS.map(p => `<option ${p === producto ? "selected" : ""}>${p}</option>`).join("")}
-        </select>
+function getTicketForm() {
+  return {
+    producto: el("tProducto")?.value || "San. Ind.",
+    unidades: (el("tUnidades")?.value || "").trim()
+  };
+}
+
+function setTicketForm(values) {
+  if (values.producto !== undefined) el("tProducto").value = values.producto;
+  if (values.unidades !== undefined) el("tUnidades").value = values.unidades;
+}
+
+function recalcTicketsTotals() {
+  const map = {};
+  let total = 0;
+
+  for (const t of state.tickets) {
+    const p = t.producto || "—";
+    const u = num(t.unidades);
+    total += u;
+    map[p] = (map[p] || 0) + u;
+  }
+
+  const totEl = el("totTicketsUni");
+  if (totEl) totEl.textContent = String(total);
+
+  const box = el("ticketsTotals");
+  if (!box) return;
+
+  const entries = Object.entries(map).sort((a,b) => a[0].localeCompare(b[0], "es"));
+  if (!entries.length) {
+    box.innerHTML = "";
+    return;
+  }
+
+  box.innerHTML = entries.map(([p,u]) => `
+    <div class="line-item">
+      <div class="line-left">
+        <div class="line-title">${escapeHtml(p)}</div>
       </div>
-
-      <div class="row">
-        <label class="label">Unidades</label>
-        <input type="number" step="1" inputmode="numeric" value="${escapeAttr(unidades ?? "")}" data-field="unidades" placeholder="0" />
+      <div class="line-right">
+        <div class="line-kg">${escapeHtml(String(u))}</div>
       </div>
     </div>
-  </div>`;
+  `).join("");
 }
 
 function recalcJaulasTotals() {
