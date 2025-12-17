@@ -261,6 +261,10 @@ function renderJaulas() {
 
 function renderTickets() {
   const list = el("ticketsList");
+
+  // Ordenar por producto (opcional pero muy recomendable)
+  state.tickets.sort((a, b) => (a.producto || "").localeCompare(b.producto || "", "es"));
+
   list.innerHTML = state.tickets.map(ticketItemTemplate).join("");
   recalcTicketsTotals();
 }
@@ -317,16 +321,26 @@ function addJaula() {
 function addTicket() {
   const f = getTicketForm();
 
-  if (!f.unidades || String(f.unidades).trim() === "") {
+  const u = num(f.unidades);
+  if (!u) {
     log("No añadido: faltan unidades.");
     return;
   }
 
-  state.tickets.push({
-    id: crypto.randomUUID(),
-    producto: f.producto,
-    unidades: num(f.unidades)
-  });
+  const prod = (f.producto || "—").trim();
+
+  // Si existe ya ese producto, sumamos
+  const existing = state.tickets.find(t => (t.producto || "").trim() === prod);
+
+  if (existing) {
+    existing.unidades = num(existing.unidades) + u;
+  } else {
+    state.tickets.push({
+      id: crypto.randomUUID(),
+      producto: prod,
+      unidades: u
+    });
+  }
 
   renderTickets();
 
