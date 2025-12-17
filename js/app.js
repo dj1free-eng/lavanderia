@@ -425,24 +425,24 @@ items.push({
     });
   }
 
-  // EXTRA_BOLSAS (fecha_evento = pasado mañana)
-  const extra = el("extraKg").value.trim();
-  if (extra !== "") {
-    const fechaExtra = addDays(fechaBase, 2);
-    items.push({
-  id: mkId(),
-  createdAt,
-  fecha_base: fechaBase,
-      fecha_evento: fechaExtra,
-      evento: "EXTRA_BOLSAS",
-      categoria: "",
-      detalle: "Extra (mezcla)",
-      unidades: "",
-      kg_bruto: "", tara_kg: "", kg_neto: num(extra),
-      n55: "", n24: "", n13: "", n8: "",
-      nota
-    });
-  }
+// EXTRA_BOLSAS (fecha_evento = pasado mañana)
+const extra = (el("extraKg")?.value || "").trim();
+if (extra !== "") {
+  const fechaExtra = addDays(fechaBase, 2);
+  items.push({
+    id: mkId(),
+    createdAt,
+    fecha_base: fechaBase,
+    fecha_evento: fechaExtra,
+    evento: "EXTRA_BOLSAS",
+    categoria: "",
+    detalle: "Extra (bolsas)",
+    unidades: "",
+    kg_bruto: "", tara_kg: "", kg_neto: num(extra),
+    n55: "", n24: "", n13: "", n8: "",
+    nota
+  });
+}
 
   // LAVADO_HOTEL (fecha_evento = hoy)
   const { counts } = recalcLavadoTotals();
