@@ -621,10 +621,17 @@ el("btnSync").addEventListener(
 
   // Home -> App
   el("btnStart")?.addEventListener("click", () => {
-    updateFechaUI();
-    showApp();
-    setActiveTab("sucio");
-  });
+  updateFechaUI();
+
+  // Inicialización REAL de la app
+  buildLavInputs();
+  addTicket();
+  updateJaulaPreview();
+  recalcLavadoTotals();
+
+  showApp();
+  setActiveTab("sucio");
+});
 
   // Volver a Home (cambiar fecha)
   el("btnGoHome")?.addEventListener("click", () => {
@@ -646,23 +653,16 @@ el("btnSync").addEventListener(
 
 (async function main() {
   setNetBadge();
-  buildLavInputs();
   bindListEvents();
   bindUI();
   initDate();
-    updateFechaUI();
+  updateFechaUI();
   showHome();
-  setActiveTab("sucio");
   loadCfg();
   await refreshQueueBadge();
   registerSW();
 
-  // Arranque: 1 ticket para ir rápido
-addTicket();
-updateJaulaPreview();
-  recalcLavadoTotals();
-
-  log("Listo. Guarda offline y sincroniza cuando quieras.");
+  log("Listo. Pulsa Empezar para comenzar.");
 })();
 // ===== UI Estado + Historial + Acciones seguras (Paquete 2) =====
 const UI_STATE_KEY = "lavanderia_ui_state_v1";
