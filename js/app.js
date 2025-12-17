@@ -208,9 +208,13 @@ function recalcJaulasTotals() {
     else mant += neto;
   }
 
-  el("totSab").textContent = fmtKg(sab);
-  el("totMant").textContent = fmtKg(mant);
-  el("totSuci").textContent = fmtKg(total);
+  const a = el("totSab");
+  const b = el("totMant");
+  const c = el("totSuci");
+
+  if (a) a.textContent = fmtKg(sab);
+  if (b) b.textContent = fmtKg(mant);
+  if (c) c.textContent = fmtKg(total);
 }
 
 function renderJaulas() {
