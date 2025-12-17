@@ -355,3 +355,52 @@ body{
 @media (max-width: 520px){
   .grid3{ grid-template-columns: 1fr; }
 }
+/* ===== Jaulas: línea resumen ===== */
+.line-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.14);
+}
+.line-left{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  min-width: 0;
+}
+.line-title{
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.line-sub{
+  font-size: 13px;
+  opacity: .78;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.line-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.line-kg{
+  font-weight: 900;
+  white-space: nowrap;
+}
+.iconbtn{
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.9);
+  font-size: 18px;
+  line-height: 0;
+}
