@@ -262,6 +262,7 @@ function renderJaulas() {
 function renderTickets() {
   const list = el("ticketsList");
   list.innerHTML = state.tickets.map(ticketItemTemplate).join("");
+  recalcTicketsTotals();
 }
 
 function getJaulaForm() {
@@ -314,12 +315,24 @@ function addJaula() {
 }
 
 function addTicket() {
+  const f = getTicketForm();
+
+  if (!f.unidades || String(f.unidades).trim() === "") {
+    log("No añadido: faltan unidades.");
+    return;
+  }
+
   state.tickets.push({
     id: crypto.randomUUID(),
-    producto: "San. Ind.",
-    unidades: ""
+    producto: f.producto,
+    unidades: num(f.unidades)
   });
+
   renderTickets();
+
+  // limpiar para la siguiente entrada
+  setTicketForm({ unidades: "" });
+  el("tUnidades")?.focus();
 }
 
 function bindListEvents() {
