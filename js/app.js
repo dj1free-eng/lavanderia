@@ -516,15 +516,16 @@ async function syncNow() {
   // 1) Mejor opción en iOS/PWA: sendBeacon
   try {
     if (navigator.sendBeacon) {
-  const ok = navigator.sendBeacon(
-    cfg.url,
-    new Blob([payload], { type: "text/plain;charset=utf-8" })
-  );
-  if (ok) {
-    sent = true;
-    uiMarkSent();
-  }
-} catch (e) {
+      const ok = navigator.sendBeacon(
+        cfg.url,
+        new Blob([payload], { type: "text/plain;charset=utf-8" })
+      );
+      if (ok) {
+        sent = true;
+        uiMarkSent();
+      }
+    }
+  } catch (e) {
     // seguimos al fallback
   }
 
