@@ -589,6 +589,14 @@ function initDate() {
 }
 
 function bindUI() {
+    // Jaulas: preview neto + tara rápida
+  el("jBruto")?.addEventListener("input", updateJaulaPreview);
+  el("jTara")?.addEventListener("input", updateJaulaPreview);
+  el("jCategoria")?.addEventListener("change", updateJaulaPreview);
+  el("btnTara42")?.addEventListener("click", () => {
+    el("jTara").value = "42";
+    updateJaulaPreview();
+  });
   el("btnAddJaula").addEventListener("click", addJaula);
   el("btnAddTicket").addEventListener("click", addTicket);
 el("btnGuardarParte").addEventListener(
@@ -648,9 +656,9 @@ el("btnSync").addEventListener(
   await refreshQueueBadge();
   registerSW();
 
-  // Arranque con 1 jaula + 1 ticket para ir rápido
-  addJaula();
-  addTicket();
+  // Arranque: 1 ticket para ir rápido
+addTicket();
+updateJaulaPreview();
   recalcLavadoTotals();
 
   log("Listo. Guarda offline y sincroniza cuando quieras.");
