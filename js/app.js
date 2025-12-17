@@ -224,15 +224,53 @@ function renderTickets() {
   list.innerHTML = state.tickets.map(ticketItemTemplate).join("");
 }
 
+function getJaulaForm() {
+  return {
+    numJaula: (el("jNumJaula")?.value || "").trim(),
+    categoria: el("jCategoria")?.value || "SÁBANAS",
+    bruto: el("jBruto")?.value,
+    tara: el("jTara")?.value
+  };
+}
+
+function setJaulaForm(values) {
+  if (values.numJaula !== undefined) el("jNumJaula").value = values.numJaula;
+  if (values.categoria !== undefined) el("jCategoria").value = values.categoria;
+  if (values.bruto !== undefined) el("jBruto").value = values.bruto;
+  if (values.tara !== undefined) el("jTara").value = values.tara;
+}
+
+function updateJaulaPreview() {
+  const f = getJaulaForm();
+  const neto = Math.max(0, num(f.bruto) - num(f.tara ?? 42));
+  const out = el("jNetoPreview");
+  if (out) out.textContent = fmtKg(neto);
+}
+
 function addJaula() {
+  const f = getJaulaForm();
+
+  if (!f.bruto || String(f.bruto).trim() === "") {
+    log("No añadida: falta el peso bruto.");
+    return;
+  }
+
   state.jaulas.push({
     id: crypto.randomUUID(),
-    categoria: "SÁBANAS",
-    numJaula: "",
-    bruto: "",
-    tara: 42
+    categoria: f.categoria || "SÁBANAS",
+    numJaula: f.numJaula || "",
+    bruto: num(f.bruto),
+    tara: num(f.tara ?? 42)
   });
+
   renderJaulas();
+
+  // Limpiar para la siguiente entrada (modo captura rápida)
+  setJaulaForm({ numJaula: "", bruto: "" });
+  updateJaulaPreview();
+
+  // Poner el cursor de vuelta en Nº jaula para ir rápido
+  el("jNumJaula")?.focus();
 }
 
 function addTicket() {
