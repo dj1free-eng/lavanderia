@@ -45,29 +45,53 @@
       <section class="tab" data-tab="sucio">
         <section class="card">
           <div class="card-head">
-            <div>
-              <div class="card-title">Ropa sucia (jaulas)</div>
-              <div class="card-subtitle">Peso bruto y tara para calcular neto</div>
-            </div>
-            <button id="btnAddJaula" class="btn btn-outline">+ Jaula</button>
-          </div>
+  <div>
+    <div class="card-title">Ropa sucia (jaulas)</div>
+    <div class="card-subtitle">Rellena el formulario y añade. Se limpia para la siguiente jaula.</div>
+  </div>
+</div>
 
-          <div id="jaulasList" class="list"></div>
+<!-- Formulario único -->
+<div class="grid2">
+  <div class="row">
+    <label class="label">Nº jaula</label>
+    <input id="jNumJaula" type="text" placeholder="Ej: 12A" />
+  </div>
 
-          <div class="totals">
-            <div class="tot">
-              <div class="tot-label">Sábanas</div>
-              <div class="tot-val" id="totSab">0,0 kg</div>
-            </div>
-            <div class="tot">
-              <div class="tot-label">Mantelería</div>
-              <div class="tot-val" id="totMant">0,0 kg</div>
-            </div>
-            <div class="tot tot-main">
-              <div class="tot-label">Total sucio</div>
-              <div class="tot-val" id="totSuci">0,0 kg</div>
-            </div>
-          </div>
+  <div class="row">
+    <label class="label">Categoría</label>
+    <select id="jCategoria">
+      <option>SÁBANAS</option>
+      <option>SERVILLETAS</option>
+      <option>CAMINOS</option>
+      <option>MANTELES</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label class="label">Peso bruto (kg)</label>
+    <input id="jBruto" type="number" step="0.1" inputmode="decimal" placeholder="Ej: 196.2" />
+  </div>
+
+  <div class="row">
+    <label class="label">Tara (kg)</label>
+    <div style="display:flex; gap:10px;">
+      <input id="jTara" type="number" step="0.1" inputmode="decimal" value="42" />
+      <button id="btnTara42" class="btn btn-outline" type="button">42</button>
+    </div>
+  </div>
+</div>
+
+<div class="mini" style="margin-top:10px;">
+  <strong>Neto:</strong> <span id="jNetoPreview">0,0 kg</span>
+</div>
+
+<div class="actions" style="margin-top:12px;">
+  <button id="btnAddJaula" class="btn btn-primary">Añadir jaula</button>
+</div>
+
+<!-- Lista resumen -->
+<div id="jaulasList" class="list"></div>
 
           <div class="row">
             <label class="label">Extra (kg) que vuelve en bolsas</label>
