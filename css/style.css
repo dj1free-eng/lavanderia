@@ -557,3 +557,7 @@ body{
 #sliderModalRange{
   width: 100%;
 }
+/* El input de HOTEL no debe capturar el toque */
+.lav input[readonly]{
+  pointer-events: none;
+}
