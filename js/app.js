@@ -992,13 +992,18 @@ function bindSliderModal() {
   closeBtn.addEventListener("click", closeSliderModal);
 
   document.addEventListener("pointerdown", (ev) => {
-    const input = ev.target.closest('.lav input');
-    if (!input) return;
+  if (ev.target.closest(".stepper-btn")) return;
 
-    sliderPressTimer = setTimeout(() => {
-      openSliderModalForInput(input);
-    }, 450);
-  });
+  const wrap = ev.target.closest(".stepper-wrap");
+  if (!wrap) return;
+
+  const input = wrap.querySelector('input[data-tipo][data-size]');
+  if (!input) return;
+
+  sliderPressTimer = setTimeout(() => {
+    openSliderModalForInput(input);
+  }, 450);
+});
 
   document.addEventListener("pointerup", () => {
     if (sliderPressTimer) {
