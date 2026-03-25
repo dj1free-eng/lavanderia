@@ -634,17 +634,21 @@ async function clearQueueConfirm() {
 function registerSW() {
   if (!("serviceWorker" in navigator)) return;
   navigator.serviceWorker.register("./sw.js").catch(() => { /* ignore */ });
-// Mostrar versión del SW (robusto)
+
+  // Mostrar versión leyendo sw.js
+  setTimeout(mostrarVersionSW, 500);
+}
+
 async function mostrarVersionSW() {
   try {
     const res = await fetch(`./sw.js?v=${Date.now()}`, { cache: "no-store" });
     const txt = await res.text();
 
-const match = txt.match(/CACHE_NAME\s*=\s*["'`](.*?)["'`]/);
+    const match = txt.match(/CACHE_NAME\s*=\s*["'`](.*?)["'`]/);
     if (!match) return;
 
     const cacheName = match[1];
-const ver = cacheName.match(/v(\d+)/);
+    const ver = cacheName.match(/v(\d+)/);
     if (!ver) return;
 
     const version = (parseInt(ver[1], 10) / 100).toFixed(2);
@@ -655,14 +659,12 @@ const ver = cacheName.match(/v(\d+)/);
   }
 }
 
-setTimeout(mostrarVersionSW, 500);
-
 function initDate() {
   el("fechaBase").value = isoDate(new Date());
 }
 
 function bindUI() {
-    // Jaulas: preview neto + tara rápida
+  // Jaulas: preview neto + tara rápida
   el("jBruto")?.addEventListener("input", updateJaulaPreview);
   el("jTara")?.addEventListener("input", updateJaulaPreview);
   el("jCategoria")?.addEventListener("change", updateJaulaPreview);
@@ -670,19 +672,22 @@ function bindUI() {
     el("jTara").value = "42";
     updateJaulaPreview();
   });
+
   el("btnAddJaula").addEventListener("click", addJaula);
   el("btnAddTicket").addEventListener("click", addTicket);
-el("btnGuardarParte").addEventListener(
-  "click",
-  withButtonFeedback(el("btnGuardarParte"), guardarParteOffline)
-);
-el("btnSync").addEventListener(
-  "click",
-  withButtonFeedback(el("btnSync"), syncNow)
-);
+
+  el("btnGuardarParte").addEventListener(
+    "click",
+    withButtonFeedback(el("btnGuardarParte"), guardarParteOffline)
+  );
+
+  el("btnSync").addEventListener(
+    "click",
+    withButtonFeedback(el("btnSync"), syncNow)
+  );
+
   el("btnSaveCfg").addEventListener("click", saveCfg);
   el("btnExport").addEventListener("click", exportQueue);
-
 
   document.addEventListener("input", (ev) => {
     if (ev.target.matches(".lav input")) recalcLavadoTotals();
@@ -704,7 +709,7 @@ el("btnSync").addEventListener(
     }
   });
 
-  // Volver a Home (cambiar fecha)
+  // Volver a Home
   el("btnGoHome")?.addEventListener("click", () => {
     showHome();
   });
@@ -717,9 +722,8 @@ el("btnSync").addEventListener(
     });
   });
 
-  // Si cambias fecha, refresca cabecera
+  // Fecha
   el("fechaBase")?.addEventListener("change", updateFechaUI);
-
 }
 
 (async function main() {
