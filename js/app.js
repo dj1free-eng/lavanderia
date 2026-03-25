@@ -946,6 +946,74 @@ function withButtonFeedback(btn, fn) {
       btn.classList.remove("btn-working");
     }
   };
+  // ===== Long press -> mini modal slider para campos HOTEL =====
+let sliderTargetInput = null;
+let sliderPressTimer = null;
+
+function openSliderModalForInput(input) {
+  sliderTargetInput = input;
+
+  const modal = document.getElementById("sliderModal");
+  const range = document.getElementById("sliderModalRange");
+  const value = document.getElementById("sliderModalValue");
+
+  if (!modal || !range || !value) return;
+
+  const current = parseInt(input.value || "0", 10) || 0;
+  range.value = Math.min(current, 15);
+  value.textContent = String(current);
+
+  modal.classList.remove("hidden");
+}
+
+function closeSliderModal() {
+  const modal = document.getElementById("sliderModal");
+  if (modal) modal.classList.add("hidden");
+  sliderTargetInput = null;
+}
+
+function bindSliderModal() {
+  const range = document.getElementById("sliderModalRange");
+  const value = document.getElementById("sliderModalValue");
+  const closeBtn = document.getElementById("sliderModalClose");
+
+  if (!range || !value || !closeBtn) return;
+
+  range.addEventListener("input", () => {
+    const v = parseInt(range.value || "0", 10) || 0;
+    value.textContent = String(v);
+
+    if (sliderTargetInput) {
+      sliderTargetInput.value = v;
+      recalcLavadoTotals();
+    }
+  });
+
+  closeBtn.addEventListener("click", closeSliderModal);
+
+  document.addEventListener("pointerdown", (ev) => {
+    const input = ev.target.closest('.lav input');
+    if (!input) return;
+
+    sliderPressTimer = setTimeout(() => {
+      openSliderModalForInput(input);
+    }, 450);
+  });
+
+  document.addEventListener("pointerup", () => {
+    if (sliderPressTimer) {
+      clearTimeout(sliderPressTimer);
+      sliderPressTimer = null;
+    }
+  });
+
+  document.addEventListener("pointercancel", () => {
+    if (sliderPressTimer) {
+      clearTimeout(sliderPressTimer);
+      sliderPressTimer = null;
+    }
+  });
+}
 }
 
 // IMPORTANTE: cuando tu sync realmente "envíe", llama a uiMarkSent()
