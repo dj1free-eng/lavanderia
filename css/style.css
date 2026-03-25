@@ -464,3 +464,9 @@ body{
   justify-content: center;
   flex-wrap: wrap;
 }
+.home-version{
+  margin-top: 10px;
+  font-size: 13px;
+  opacity: 0.7;
+  text-align: center;
+}
