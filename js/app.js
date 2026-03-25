@@ -675,6 +675,7 @@ el("btnSync").addEventListener(
     try {
       updateFechaUI();
       updateJaulaPreview();
+      buildLavInputs();
       showApp();
       setActiveTab("sucio");
     } catch (e) {
