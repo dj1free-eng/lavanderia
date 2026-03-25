@@ -36,13 +36,20 @@
 
   <!-- APP -->
   <section id="appScreen" class="app hidden">
-    <header class="appbar">
-      <div class="appbar-left">
-        <div class="appbar-title">Lavandería</div>
-        <div class="appbar-date" id="uiFechaBase">—</div>
-      </div>
-      <button id="btnGoHome" class="btn btn-outline btn-small">Cambiar fecha</button>
-    </header>
+    <header class="appbar premium-appbar">
+  <div class="premium-appbar-left">
+    <div class="premium-appbar-title">Lavandería <span class="dot-sep">·</span></div>
+    <div class="premium-appbar-date" id="uiFechaBase">—</div>
+  </div>
+
+  <div class="premium-appbar-right">
+    <div class="net-pill">
+      <div class="net-dot" id="netDotMini"></div>
+      <span id="netLabelMini">—</span>
+    </div>
+    <button id="btnGoHome" class="icon-btn" type="button" title="Cambiar fecha">📅</button>
+  </div>
+</header>
 
     <main class="main">
       <!-- TAB: SUCIO -->
