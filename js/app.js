@@ -674,6 +674,7 @@ el("btnSync").addEventListener(
   el("btnStart")?.addEventListener("click", () => {
     try {
       updateFechaUI();
+      updateJaulaPreview();
       showApp();
       setActiveTab("sucio");
     } catch (e) {
