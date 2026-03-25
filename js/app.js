@@ -672,16 +672,15 @@ el("btnSync").addEventListener(
 
   // Home -> App
   el("btnStart")?.addEventListener("click", () => {
-  updateFechaUI();
-
-  // Inicialización REAL de la app
-  buildLavInputs();
-  updateJaulaPreview();
-  recalcLavadoTotals();
-
-  showApp();
-  setActiveTab("sucio");
-});
+    try {
+      updateFechaUI();
+      showApp();
+      setActiveTab("sucio");
+    } catch (e) {
+      console.error("Error al iniciar:", e);
+      alert("Error al iniciar la app");
+    }
+  });
 
   // Volver a Home (cambiar fecha)
   el("btnGoHome")?.addEventListener("click", () => {
