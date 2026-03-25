@@ -640,11 +640,11 @@ async function mostrarVersionSW() {
     const res = await fetch(`./sw.js?v=${Date.now()}`, { cache: "no-store" });
     const txt = await res.text();
 
-    const match = txt.match(/CACHE_NAME\\s*=\\s*["'`](.*?)["'`]/);
+const match = txt.match(/CACHE_NAME\s*=\s*["'`](.*?)["'`]/);
     if (!match) return;
 
     const cacheName = match[1];
-    const ver = cacheName.match(/v(\\d+)/);
+const ver = cacheName.match(/v(\d+)/);
     if (!ver) return;
 
     const version = (parseInt(ver[1], 10) / 100).toFixed(2);
