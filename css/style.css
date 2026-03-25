@@ -470,3 +470,43 @@ body{
   opacity: 0.7;
   text-align: center;
 }
+/* ===== Stepper vertical para campos numéricos de HOTEL ===== */
+.stepper-wrap{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.stepper-btn{
+  width: 32px;
+  height: 24px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.05);
+  color: rgba(255,255,255,.92);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.stepper-btn:active{
+  transform: scale(0.96);
+  filter: brightness(0.92);
+}
+
+.lav-box .cell{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.lav-box .cell input{
+  width: 100%;
+  text-align: center;
+}
