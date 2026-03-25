@@ -177,7 +177,7 @@ function ticketItemTemplate(data) {
     <div class="line-item" data-id="${id}">
       <div class="line-left">
         <div class="line-title">${escapeHtml(producto || "—")}</div>
-        <div class="line-sub">Unidades: ${escapeHtml(String(unidades ?? ""))}</div>
+        <div class="line-sub">Unidades: ${escapeHtml(String(unidades ?? 0))}</div>
       </div>
       <div class="line-right">
         <div class="line-kg">${escapeHtml(String(unidades ?? 0))}</div>
@@ -186,7 +186,6 @@ function ticketItemTemplate(data) {
     </div>
   `;
 }
-
 function getTicketForm() {
   return {
     producto: el("tProducto")?.value || "San. Ind.",
