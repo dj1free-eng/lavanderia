@@ -637,33 +637,26 @@ function registerSW() {
 // Mostrar versión del SW (robusto)
 async function mostrarVersionSW() {
   try {
-    if (!('caches' in window)) return;
+    const res = await fetch(`./sw.js?v=${Date.now()}`, { cache: "no-store" });
+    const txt = await res.text();
 
-    const keys = await caches.keys();
+    const match = txt.match(/CACHE_NAME\\s*=\\s*["'`](.*?)["'`]/);
+    if (!match) return;
 
-    // Busca cualquier cache con versión
-    const cacheName = keys.find(k => k.includes('v'));
+    const cacheName = match[1];
+    const ver = cacheName.match(/v(\\d+)/);
+    if (!ver) return;
 
-    if (cacheName) {
-      const match = cacheName.match(/v(\d+)/);
-
-      if (match) {
-        const version = (parseInt(match[1], 10) / 100).toFixed(2);
-        const elVersion = document.getElementById("homeVersion");
-        if (elVersion) {
-          elVersion.textContent = "Versión: " + version;
-        }
-      }
-    } else {
-      console.log("No hay caches aún");
-    }
+    const version = (parseInt(ver[1], 10) / 100).toFixed(2);
+    const elVersion = document.getElementById("homeVersion");
+    if (elVersion) elVersion.textContent = "Versión: " + version;
   } catch (e) {
-    console.warn("No se pudo obtener versión SW", e);
+    console.warn("No se pudo leer sw.js", e);
   }
 }
 
-// Ejecutar con pequeño delay (clave)
-setTimeout(mostrarVersionSW, 1000);
+setTimeout(mostrarVersionSW, 500);
+
 function initDate() {
   el("fechaBase").value = isoDate(new Date());
 }
