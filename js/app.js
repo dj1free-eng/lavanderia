@@ -634,14 +634,19 @@ async function clearQueueConfirm() {
 function registerSW() {
   if (!("serviceWorker" in navigator)) return;
   navigator.serviceWorker.register("./sw.js").catch(() => { /* ignore */ });
-// Mostrar versión del SW
-try {
-  if ('caches' in window) {
+// Mostrar versión del SW (robusto)
+async function mostrarVersionSW() {
+  try {
+    if (!('caches' in window)) return;
+
     const keys = await caches.keys();
-    const cacheName = keys.find(k => k.includes('lavanderia-v'));
+
+    // Busca cualquier cache con versión
+    const cacheName = keys.find(k => k.includes('v'));
 
     if (cacheName) {
       const match = cacheName.match(/v(\d+)/);
+
       if (match) {
         const version = (parseInt(match[1], 10) / 100).toFixed(2);
         const elVersion = document.getElementById("homeVersion");
@@ -649,14 +654,16 @@ try {
           elVersion.textContent = "Versión: " + version;
         }
       }
+    } else {
+      console.log("No hay caches aún");
     }
+  } catch (e) {
+    console.warn("No se pudo obtener versión SW", e);
   }
-} catch (e) {
-  console.warn("No se pudo obtener versión SW", e);
 }
 
-}
-
+// Ejecutar con pequeño delay (clave)
+setTimeout(mostrarVersionSW, 1000);
 function initDate() {
   el("fechaBase").value = isoDate(new Date());
 }
