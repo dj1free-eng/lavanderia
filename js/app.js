@@ -760,7 +760,7 @@ document.addEventListener("click", (ev) => {
   loadCfg();
   await refreshQueueBadge();
   registerSW();
-
+  bindSliderModal();
   log("Listo. Pulsa Empezar para comenzar.");
 })();
 // ===== UI Estado + Historial + Acciones seguras (Paquete 2) =====
