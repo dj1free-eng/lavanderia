@@ -677,7 +677,6 @@ el("btnSync").addEventListener(
 
   // Inicialización REAL de la app
   buildLavInputs();
-  addTicket();
   updateJaulaPreview();
   recalcLavadoTotals();
 
