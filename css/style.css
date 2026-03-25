@@ -494,9 +494,22 @@ body{
   padding: 0;
 }
 
-.stepper-btn:active{
-  transform: scale(0.96);
-  filter: brightness(0.92);
+.stepper-btn{
+  width: 100%;
+  height: 28px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.95);
+  font-size: 14px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.stepper-wrap{
+  width: 100%;
 }
 
 .lav-box .cell{
