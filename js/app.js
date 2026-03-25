@@ -634,6 +634,27 @@ async function clearQueueConfirm() {
 function registerSW() {
   if (!("serviceWorker" in navigator)) return;
   navigator.serviceWorker.register("./sw.js").catch(() => { /* ignore */ });
+// Mostrar versión del SW
+try {
+  if ('caches' in window) {
+    const keys = await caches.keys();
+    const cacheName = keys.find(k => k.includes('lavanderia-v'));
+
+    if (cacheName) {
+      const match = cacheName.match(/v(\d+)/);
+      if (match) {
+        const version = (parseInt(match[1], 10) / 100).toFixed(2);
+        const elVersion = document.getElementById("homeVersion");
+        if (elVersion) {
+          elVersion.textContent = "Versión: " + version;
+        }
+      }
+    }
+  }
+} catch (e) {
+  console.warn("No se pudo obtener versión SW", e);
+}
+
 }
 
 function initDate() {
