@@ -692,7 +692,31 @@ function bindUI() {
   document.addEventListener("input", (ev) => {
     if (ev.target.matches(".lav input")) recalcLavadoTotals();
   });
+// Stepper +/- para lavadoras
+document.addEventListener("click", (ev) => {
+  const btn = ev.target.closest(".stepper-btn");
+  if (!btn) return;
 
+  const step = parseInt(btn.dataset.step, 10);
+  const tipo = btn.dataset.tipo;
+  const size = btn.dataset.size;
+
+  const input = document.querySelector(
+    `.lav input[data-tipo="${tipo}"][data-size="${size}"]`
+  );
+
+  if (!input) return;
+
+  let val = parseInt(input.value || "0", 10);
+  val = isNaN(val) ? 0 : val;
+
+  val += step;
+  if (val < 0) val = 0;
+
+  input.value = val;
+
+  recalcLavadoTotals();
+});
   window.addEventListener("online", () => { setNetBadge(); log("Online."); });
   window.addEventListener("offline", () => { setNetBadge(); log("Offline."); });
 
