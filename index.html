@@ -405,12 +405,27 @@
     </main>
 
     <!-- NAV TABS -->
-    <nav class="tabs">
-      <button class="tabbtn active" data-go="sucio">SUCIO</button>
-      <button class="tabbtn" data-go="limpio">LIMPIO</button>
-      <button class="tabbtn" data-go="hotel">HOTEL</button>
-      <button class="tabbtn" data-go="ajustes">AJUSTES</button>
-    </nav>
+    <nav class="tabs premium-tabs">
+  <button class="tabbtn premium-tab active" data-go="sucio" type="button">
+    <span class="tab-icon">🧺</span>
+    <span class="tab-text">Sucio</span>
+  </button>
+
+  <button class="tabbtn premium-tab" data-go="limpio" type="button">
+    <span class="tab-icon">✨</span>
+    <span class="tab-text">Limpio</span>
+  </button>
+
+  <button class="tabbtn premium-tab" data-go="hotel" type="button">
+    <span class="tab-icon">🏨</span>
+    <span class="tab-text">Hotel</span>
+  </button>
+
+  <button class="tabbtn premium-tab" data-go="ajustes" type="button">
+    <span class="tab-icon">⚙️</span>
+    <span class="tab-text">Más</span>
+  </button>
+</nav>
 
     <div class="fabbar">
       <button id="btnGuardarParte" class="btn btn-primary btn-wide">Guardar parte offline</button>
