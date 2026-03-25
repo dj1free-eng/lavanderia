@@ -561,3 +561,81 @@ body{
 .lav input[readonly]{
   pointer-events: none;
 }
+/* ===== HEADER PREMIUM ===== */
+.premium-appbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #12121a;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.premium-appbar-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.premium-appbar-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #f1f1ff;
+  display: flex;
+  align-items: center;
+}
+
+.dot-sep {
+  opacity: 0.3;
+  margin-left: 4px;
+}
+
+.premium-appbar-date {
+  font-size: 12px;
+  color: #8c8ca3;
+}
+
+/* derecha */
+.premium-appbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* pill conexión */
+.net-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #1a1a26;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  color: #9a9ab0;
+}
+
+.net-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #30d158;
+}
+
+.net-dot.off {
+  background: #ff9f0a;
+}
+
+/* botón icono */
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: #1a1a26;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+.icon-btn:active {
+  transform: scale(0.92);
+}
