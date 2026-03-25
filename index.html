@@ -10,25 +10,28 @@
 </head>
 <body>
   <!-- HOME / PORTADA -->
-  <section id="homeScreen" class="home">
-    <div class="home-card">
-      <img class="home-logo" src="./assets/hotel-logo.png" alt="Hotel" />
-      <div class="home-title">Lavandería</div>
-      <div class="home-sub">Parte diario</div>
+<section id="homeScreen" class="home">
+  <div class="home-card">
+    <img class="home-logo" src="./assets/hotel-logo.png" alt="Hotel" />
 
-      <div class="home-date">
-        <label class="label">Fecha del parte</label>
-        <input id="fechaBase" type="date" />
-      </div>
+    <div class="home-title">Lavandería</div>
+    <div class="home-sub">Selecciona la fecha y entra al parte diario</div>
 
-      <button id="btnStart" class="btn btn-primary btn-big">Empezar</button>
-
-      <div class="home-mini">
-        <span id="netBadge" class="badge badge-muted">—</span>
-        <span id="queueBadge" class="badge badge-muted">Cola: 0</span>
-      </div>
+    <div class="home-date">
+      <label class="label">Fecha del parte</label>
+      <input id="fechaBase" type="date" />
     </div>
-  </section>
+
+    <div class="home-actions">
+      <button id="btnStart" class="btn btn-primary btn-big">Empezar</button>
+    </div>
+
+    <div class="home-status">
+      <span id="netBadge" class="badge badge-muted">—</span>
+      <span id="queueBadge" class="badge badge-muted">Cola: 0</span>
+    </div>
+  </div>
+</section>
 
   <!-- APP -->
   <section id="appScreen" class="app hidden">
