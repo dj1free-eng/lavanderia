@@ -53,6 +53,19 @@ function setNetBadge() {
   b.classList.toggle("badge-ok", on);
   b.classList.toggle("badge-bad", !on);
   b.classList.toggle("badge-muted", false);
+  // header premium
+const dotMini = el("netDotMini");
+const labelMini = el("netLabelMini");
+
+if (dotMini && labelMini) {
+  if (navigator.onLine) {
+    dotMini.classList.remove("off");
+    labelMini.textContent = "Online";
+  } else {
+    dotMini.classList.add("off");
+    labelMini.textContent = "Offline";
+  }
+}
 }
 
 async function refreshQueueBadge() {
